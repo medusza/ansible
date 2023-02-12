@@ -28,7 +28,13 @@
     repo: https://github.com/pyenv/pyenv.git
     dest: /usr/local/pyenv
     clone: yes
-    
+
+- name: Change ownership of /usr/local/pyenv to local user
+  file:
+    path: /usr/local/pyenv
+    owner: pi
+    group: root
+
 - name: Add pyenv to environment variables
   lineinfile:
     path: /etc/environment
@@ -61,6 +67,8 @@
     line: 'eval "$(pyenv virtualenv-init -)"'
     state: present
   become: yes
+
+
 
 # - name: Install Python version using pyenv
 #   shell: /usr/local/pyenv/bin/pyenv install {{ python_version }}
