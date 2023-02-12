@@ -10,22 +10,21 @@ services:
       - ./playbooks:/ansible/playbooks
       - ./roles:/ansible/roles
       - ./hosts:/etc/ansible/hosts
+      - ~/.ssh:/root/.ssh
     command: sh -c "apt-get update && apt-get install sshpass -y && pip install --upgrade pip && pip install -r requirements.txt && tail -f /dev/null"
     environment:
       - ANSIBLE_HOST_KEY_CHECKING=False
 
-  database:
-    image: postgres:12.2
-    environment:
-      - POSTGRES_PASSWORD=mysecretpassword
-    ports:
-      - 5432:5432
+  # database:
+  #   image: postgres:12.2
+  #   environment:
+  #     - POSTGRES_PASSWORD=mysecretpassword
+  #   ports:
+  #     - 5432:5432
 
-  web:
-    image: nginx:1.17.10
-    ports:
-      - 80:80
+  # web:
+  #   image: nginx:1.17.10
+  #   ports:
+  #     - 80:80
 
 
-# ansible-playbook -i raspberry playbooks/video_streaming.yml
-# docker exec ansible-ansible-1 ansible-playbook -i inventory.ini video_streaming.yml

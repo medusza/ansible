@@ -1,5 +1,5 @@
 - name: Set up Raspberry Pi for video streaming
-  hosts: raspberry
+  hosts: raspberry_pi
   become: yes
 
   tasks:

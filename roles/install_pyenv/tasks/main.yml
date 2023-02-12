@@ -1,0 +1,71 @@
+---  
+- name: Update system packages
+  apt:
+    update_cache: yes
+    
+- name: Install dependencies for pyenv
+  apt:
+    name: "{{ packages }}"
+    state: present
+  vars:
+    packages:
+      - build-essential
+      - libssl-dev
+      - zlib1g-dev
+      - libbz2-dev
+      - libreadline-dev
+      - libsqlite3-dev
+      - wget
+      - curl
+      - llvm
+      - libncurses5-dev
+      - xz-utils
+      - tk-dev
+      - git
+      
+- name: Clone pyenv repository
+  git:
+    repo: https://github.com/pyenv/pyenv.git
+    dest: /usr/local/pyenv
+    clone: yes
+    
+- name: Add pyenv to environment variables
+  lineinfile:
+    path: /etc/environment
+    line: 'export PYENV_ROOT="/usr/local/pyenv"'
+    state: present
+  become: yes
+
+- name: Create pyenv shell profile
+  file:
+    path: /etc/profile.d/pyenv.sh
+    state: touch
+  become: yes
+
+- name: Add pyenv to shell profile
+  lineinfile:
+    path: /etc/profile.d/pyenv.sh
+    line: 'export PATH="$PYENV_ROOT/bin:$PATH"'
+    state: present
+  become: yes
+    
+- name: Clone pyenv-virtualenv repository
+  git:
+    repo: https://github.com/pyenv/pyenv-virtualenv.git
+    dest: /usr/local/pyenv/plugins/pyenv-virtualenv
+    clone: yes
+    
+- name: Add pyenv-virtualenv to shell profile
+  lineinfile:
+    path: /etc/profile.d/pyenv.sh
+    line: 'eval "$(pyenv virtualenv-init -)"'
+    state: present
+  become: yes
+
+# - name: Install Python version using pyenv
+#   shell: /usr/local/pyenv/bin/pyenv install {{ python_version }}
+
+# - name: Set global Python version using pyenv
+#   shell:  /usr/local/pyenv/bin/pyenv global {{ python_version }}
+#   vars:
+#     python_version: "{{ python_version }}"

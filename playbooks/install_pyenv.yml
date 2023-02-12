@@ -1,0 +1,12 @@
+---
+- name: Install pyenv and pyenv-virtualenv on Raspberry Pi
+  hosts: raspberry_pi
+  become: yes
+
+  vars:
+    python_version: "{{ python_version }}"
+
+  roles:
+    - ./roles/install_pyenv
+
+# ansible-playbook -i inventory.ini playbooks/install_pyenv.yml -e "python_version=3.10.7"
